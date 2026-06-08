@@ -133,3 +133,30 @@ export const orders: Order[] = [
     updatedAt: "2026-05-20",
   },
 ];
+
+export const orderStatuses = [
+  {
+    value: "all",
+    label: "All Status",
+  },
+  {
+    value: "approved",
+    label: "Approved",
+  },
+  {
+    value: "in_production",
+    label: "In Production",
+  },
+  {
+    value: "printing",
+    label: "Printing",
+  },
+  {
+    value: "quality_check",
+    label: "Quality Check",
+  },
+  {
+    value: "completed",
+    label: "Completed",
+  },
+];

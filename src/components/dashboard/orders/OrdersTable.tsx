@@ -1,7 +1,13 @@
-import { orders } from "@/constants/orders";
+import { Order } from "@/types/order";
 import OrderTableRow from "./OrderTableRow";
 
-export default function OrdersTable() {
+type OrdersTableProps = {
+  orders: Order[];
+};
+
+export default function OrdersTable({
+  orders,
+}: OrdersTableProps) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
       <table className="w-full">
