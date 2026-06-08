@@ -1,8 +1,13 @@
-import { categories } from "@/constants/categories";
-
+import { Category } from "@/constants/categories";
 import CategoryTableRow from "./CategoryTableRow";
 
-export default function CategoriesTable() {
+type CategoriesTableProps = {
+  categories: Category[];
+};
+
+export default function CategoriesTable({
+  categories,
+}: CategoriesTableProps) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
       <table className="w-full">
@@ -37,13 +42,9 @@ export default function CategoriesTable() {
               id={category.id}
               name={category.name}
               slug={category.slug}
-              description={
-                category.description
-              }
+              description={category.description}
               status={category.status}
-              createdAt={
-                category.createdAt
-              }
+              createdAt={category.createdAt}
             />
           ))}
         </tbody>

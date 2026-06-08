@@ -139,3 +139,18 @@ export const categories: Category[] = [
     updatedAt: "2026-05-20",
   },
 ];
+
+export const categoryStatuses = [
+  {
+    value: "all",
+    label: "All Status",
+  },
+  {
+    value: "active",
+    label: "Active",
+  },
+  {
+    value: "inactive",
+    label: "Inactive",
+  },
+];
