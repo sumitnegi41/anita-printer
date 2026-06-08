@@ -1,7 +1,15 @@
 import InquiryTableRow from "./InquiryTableRow";
 import { inquiries } from "@/constants/inquiries";
 
-export default function InquiryTable() {
+type Inquiry = (typeof inquiries)[number];
+
+type InquiryTableProps = {
+  inquiries: Inquiry[];
+};
+
+export default function InquiryTable({
+  inquiries,
+}: InquiryTableProps) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
       <table className="w-full">
@@ -26,16 +34,26 @@ export default function InquiryTable() {
         </thead>
 
         <tbody>
-          {inquiries.map((inquiry) => (
-            <InquiryTableRow
-              key={inquiry.id}
-              id={inquiry.id}
-              company={inquiry.company}
-              product={inquiry.product}
-              date={inquiry.date}
-              status={inquiry.status}
-            />
-          ))}
+          {inquiries.map(
+            (inquiry) => (
+              <InquiryTableRow
+                key={inquiry.id}
+                id={inquiry.id}
+                company={
+                  inquiry.company
+                }
+                product={
+                  inquiry.product
+                }
+                date={
+                  inquiry.date
+                }
+                status={
+                  inquiry.status
+                }
+              />
+            )
+          )}
         </tbody>
       </table>
     </div>

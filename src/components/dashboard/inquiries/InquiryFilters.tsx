@@ -1,53 +1,92 @@
-import { Search, SlidersHorizontal } from "lucide-react";
+import SearchInput from "@/components/shared/SearchInput";
 
-export default function InquiryFilters() {
+type InquiryFiltersProps = {
+  searchTerm: string;
+  onSearchChange: (
+    value: string
+  ) => void;
+
+  selectedStatus: string;
+  onStatusChange: (
+    value: string
+  ) => void;
+
+  hasActiveFilters: boolean;
+  onClearFilters: () => void;
+};
+
+const inquiryStatuses = [
+  {
+    value: "all",
+    label: "All Status",
+  },
+  {
+    value: "new",
+    label: "New",
+  },
+  {
+    value: "pending",
+    label: "Pending",
+  },
+  {
+    value: "quoted",
+    label: "Quoted",
+  },
+];
+
+export default function InquiryFilters({
+  searchTerm,
+  onSearchChange,
+  selectedStatus,
+  onStatusChange,
+  hasActiveFilters,
+  onClearFilters,
+}: InquiryFiltersProps) {
   return (
     <div className="flex items-center justify-between mb-6">
-      <div className="relative w-80">
-        <Search
-          size={18}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-        />
+      <SearchInput
+        value={searchTerm}
+        onChange={onSearchChange}
+        placeholder="Search inquiries..."
+      />
 
-        <input
-          type="text"
-          placeholder="Search inquiries..."
-          className="
-            w-full
-            h-11
-            pl-10
-            pr-4
-            rounded-xl
-            border
-            border-gray-200
-            bg-white
-            text-sm
-            outline-none
-            focus:ring-2
-            focus:ring-blue-500
-          "
-        />
+      <div className="flex items-center gap-3">
+        <select
+          value={selectedStatus}
+          onChange={(e) =>
+            onStatusChange(
+              e.target.value
+            )
+          }
+          className="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          {inquiryStatuses.map(
+            (status) => (
+              <option
+                key={
+                  status.value
+                }
+                value={
+                  status.value
+                }
+              >
+                {status.label}
+              </option>
+            )
+          )}
+        </select>
+
+        {hasActiveFilters && (
+          <button
+            onClick={
+              onClearFilters
+            }
+            className="h-12 px-4 rounded-xl border border-gray-200 bg-white text-sm font-medium hover:bg-gray-50"
+          >
+            Clear Filters
+          </button>
+        )}
       </div>
-
-      <button
-        className="
-          flex
-          items-center
-          gap-2
-          h-11
-          px-4
-          rounded-xl
-          border
-          border-gray-200
-          bg-white
-          text-sm
-          font-medium
-          hover:bg-gray-50
-        "
-      >
-        <SlidersHorizontal size={16} />
-        Filter
-      </button>
     </div>
   );
 }
