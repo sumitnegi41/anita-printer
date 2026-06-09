@@ -1,4 +1,5 @@
-import { Category } from "@/constants/categories";
+import type { Category } from "@/types/category";
+
 import CategoryTableRow from "./CategoryTableRow";
 
 type CategoriesTableProps = {

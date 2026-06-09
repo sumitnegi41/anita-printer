@@ -4,7 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { CategorySchema } from "@/schemas/category.schema";
-import { createCategory } from "@/services/category.service";
+import { createCategory, updateCategory, deleteCategory } from "@/services/category.service";
+
 
 export async function createCategoryAction(
   formData: FormData
@@ -30,6 +31,60 @@ export async function createCategoryAction(
   await createCategory(
     validatedData
   );
+
+  revalidatePath(
+    "/admin/categories"
+  );
+
+  redirect(
+    "/admin/categories"
+  );
+}
+
+export async function updateCategoryAction(
+  id: number,
+  formData: FormData
+) {
+  const rawData = {
+    name: formData.get("name"),
+    status: formData.get("status"),
+    description: formData.get("description"),
+    seoTitle: formData.get("seoTitle"),
+    seoDescription: formData.get("seoDescription"),
+    seoKeywords:
+      formData
+        .get("seoKeywords")
+        ?.toString()
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean) ?? [],
+  };
+
+  const validatedData =
+    CategorySchema.parse(rawData);
+
+  await updateCategory(
+    id,
+    validatedData
+  );
+
+  revalidatePath(
+    "/admin/categories"
+  );
+
+  revalidatePath(
+    `/admin/categories/${id}`
+  );
+
+  redirect(
+    `/admin/categories/${id}`
+  );
+}
+
+export async function deleteCategoryAction(
+  id: number
+) {
+  await deleteCategory(id);
 
   revalidatePath(
     "/admin/categories"

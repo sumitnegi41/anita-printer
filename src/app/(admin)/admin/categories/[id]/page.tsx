@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { categories } from "@/constants/categories";
+import { getCategoryById } from "@/services/category.service";
 
 type CategoryDetailsPageProps = {
   params: Promise<{
@@ -14,8 +14,8 @@ export default async function CategoryDetailsPage({
 }: CategoryDetailsPageProps) {
   const { id } = await params;
 
-  const category = categories.find(
-    (item) => item.id === Number(id)
+  const category = await getCategoryById(
+    Number(id)
   );
 
   if (!category) {
@@ -39,18 +39,7 @@ export default async function CategoryDetailsPage({
 
         <Link
           href={`/admin/categories/${category.id}/edit`}
-          className="
-            inline-flex
-            items-center
-            h-11
-            px-6
-            rounded-xl
-            bg-[#07122B]
-            text-white
-            text-sm
-            font-medium
-            hover:opacity-95
-          "
+          className="inline-flex items-center h-11 px-6 rounded-xl bg-[#07122B] text-white text-sm font-medium hover:opacity-95"
         >
           Edit Category
         </Link>
@@ -107,7 +96,7 @@ export default async function CategoryDetailsPage({
               </p>
 
               <p className="mt-2 text-sm leading-7 text-gray-700">
-                {category.description}
+                {category.description ?? "-"}
               </p>
             </div>
           </div>
@@ -126,7 +115,7 @@ export default async function CategoryDetailsPage({
                 </p>
 
                 <p className="mt-1 font-medium text-gray-800">
-                  {category.seoTitle}
+                  {category.seoTitle ?? "-"}
                 </p>
               </div>
 
@@ -136,7 +125,7 @@ export default async function CategoryDetailsPage({
                 </p>
 
                 <p className="mt-2 text-sm leading-7 text-gray-700">
-                  {category.seoDescription}
+                  {category.seoDescription ?? "-"}
                 </p>
               </div>
 
@@ -150,17 +139,7 @@ export default async function CategoryDetailsPage({
                     (keyword) => (
                       <span
                         key={keyword}
-                        className="
-                          inline-flex
-                          items-center
-                          rounded-full
-                          bg-gray-100
-                          px-3
-                          py-1
-                          text-xs
-                          font-medium
-                          text-gray-700
-                        "
+                        className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700"
                       >
                         {keyword}
                       </span>
@@ -175,8 +154,6 @@ export default async function CategoryDetailsPage({
         {/* Right */}
 
         <div className="space-y-6">
-          {/* Timeline */}
-
           <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-gray-900 mb-6">
               Timeline
@@ -189,7 +166,7 @@ export default async function CategoryDetailsPage({
                 </span>
 
                 <span className="text-sm font-medium text-gray-800">
-                  {category.createdAt}
+                  {category.createdAt.toLocaleDateString()}
                 </span>
               </div>
 
@@ -199,7 +176,7 @@ export default async function CategoryDetailsPage({
                 </span>
 
                 <span className="text-sm font-medium text-gray-800">
-                  {category.updatedAt}
+                  {category.updatedAt.toLocaleDateString()}
                 </span>
               </div>
             </div>

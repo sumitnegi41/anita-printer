@@ -1,21 +1,18 @@
+import type { Category } from "@/types/category";
+
 import StatusBadge from "@/components/ui/StatusBadge";
 import TableActions from "@/components/ui/TableActions";
+import DeleteCategoryButton from "./DeleteCategoryButton";
 
-import { CategoryStatus } from "@/types/status";
-
-type CategoryTableRowProps = {
-  id: number;
-
-  name: string;
-
-  slug: string;
-
-  description: string;
-
-  status: CategoryStatus;
-
-  createdAt: string;
-};
+type CategoryTableRowProps = Pick<
+  Category,
+  | "id"
+  | "name"
+  | "slug"
+  | "description"
+  | "status"
+  | "createdAt"
+>;
 
 export default function CategoryTableRow({
   id,
@@ -27,8 +24,6 @@ export default function CategoryTableRow({
 }: CategoryTableRowProps) {
   return (
     <tr className="border-b border-gray-100 hover:bg-gray-50 transition">
-      {/* Category */}
-
       <td className="py-5 px-4">
         <div>
           <p className="font-medium text-gray-800">
@@ -36,37 +31,36 @@ export default function CategoryTableRow({
           </p>
 
           <p className="text-xs text-gray-400 mt-1">
-            {createdAt}
+            {createdAt.toLocaleDateString()}
           </p>
         </div>
       </td>
-
-      {/* Slug */}
 
       <td className="py-5 px-4 text-sm text-gray-700">
         {slug}
       </td>
 
-      {/* Description */}
-
       <td className="py-5 px-4 text-sm text-gray-600 max-w-sm">
-        {description}
+        {description ?? "-"}
       </td>
 
-      {/* Status */}
-
       <td className="py-5 px-4">
-        <StatusBadge status={status} />
+        <StatusBadge
+          status={status as "active" | "inactive"}
+        />
       </td>
 
-      {/* Actions */}
-
       <td className="py-5 px-4">
+      <div className="flex items-center gap-2">
         <TableActions
           viewHref={`/admin/categories/${id}`}
           editHref={`/admin/categories/${id}/edit`}
         />
-      </td>
+        <DeleteCategoryButton
+          categoryId={id}
+        />
+      </div>
+    </td>
     </tr>
   );
 }

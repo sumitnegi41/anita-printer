@@ -1,5 +1,7 @@
-import CreateCategoryForm from "@/components/dashboard/categories/CreateCategoryForm";
+import CategoryForm from "@/components/dashboard/categories/CategoryForm";
 
 export default function CreateCategoryPage() {
-  return <CreateCategoryForm />;
+  return (
+    <CategoryForm mode="create" />
+  );
 }

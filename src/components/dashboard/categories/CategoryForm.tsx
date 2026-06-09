@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-import { createCategoryAction } from "@/actions/category.actions";
+import { createCategoryAction, updateCategoryAction, } from "@/actions/category.actions";
+
+import type { Category } from "@/types/category";
 
 import FormSection from "@/components/forms/FormSection";
 import InputField from "@/components/forms/InputField";
@@ -10,23 +12,47 @@ import SelectField from "@/components/forms/SelectField";
 import TextareaField from "@/components/forms/TextareaField";
 import FormSubmitButton from "@/components/forms/FormSubmitButton";
 
-export default function CreateCategoryForm() {
-  const [name, setName] = useState("");
-  const [slug, setSlug] = useState("");
-  const [status, setStatus] =
-    useState("active");
+type CategoryFormProps = {
+  mode: "create" | "edit";
+  category?: Category;
+};
+
+export default function CategoryForm({
+  mode,
+  category,
+}: CategoryFormProps) {
+  const [name, setName] = useState(
+    category?.name ?? ""
+  );
+
+  const [slug, setSlug] = useState(
+    category?.slug ?? ""
+  );
+
+  const [status, setStatus] = useState(
+    category?.status ?? "active"
+  );
 
   const [description, setDescription] =
-    useState("");
+    useState(
+      category?.description ?? ""
+    );
 
   const [seoTitle, setSeoTitle] =
-    useState("");
+    useState(
+      category?.seoTitle ?? ""
+    );
 
   const [seoDescription, setSeoDescription] =
-    useState("");
+    useState(
+      category?.seoDescription ?? ""
+    );
 
   const [seoKeywords, setSeoKeywords] =
-    useState("");
+    useState(
+      category?.seoKeywords.join(", ") ??
+        ""
+    );
 
   useEffect(() => {
     const generatedSlug = name
@@ -37,22 +63,42 @@ export default function CreateCategoryForm() {
     setSlug(generatedSlug);
   }, [name]);
 
+  const action =
+    mode === "create"
+      ? createCategoryAction
+      : updateCategoryAction.bind(
+          null,
+          category!.id
+        );
+
   return (
-    <form action={createCategoryAction}>
+    <form action={action}>
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
-            Create Category
+            {mode === "create"
+              ? "Create Category"
+              : "Edit Category"}
           </h1>
 
           <p className="mt-2 text-sm text-gray-500">
-            Create and manage product categories.
+            {mode === "create"
+              ? "Create and manage product categories."
+              : "Update category details and SEO information."}
           </p>
         </div>
 
         <FormSubmitButton
-          idleText="Save Category"
-          loadingText="Saving Category..."
+          idleText={
+            mode === "create"
+              ? "Save Category"
+              : "Update Category"
+          }
+          loadingText={
+            mode === "create"
+              ? "Saving Category..."
+              : "Updating Category..."
+          }
         />
       </div>
 
