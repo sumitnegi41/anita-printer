@@ -1,3 +1,5 @@
+import FormError from "./FormError";
+
 type InputFieldProps = {
   label: string;
   name?: string;
@@ -8,6 +10,7 @@ type InputFieldProps = {
   onChange?: (value: string) => void;
   disabled?: boolean;
   required?: boolean;
+  error?: string;
 };
 
 export default function InputField({
@@ -20,6 +23,7 @@ export default function InputField({
   onChange,
   disabled = false,
   required = false,
+  error,
 }: InputFieldProps) {
   return (
     <div>
@@ -36,8 +40,13 @@ export default function InputField({
         required={required}
         placeholder={placeholder}
         onChange={(e) => onChange?.(e.target.value)}
-        className="w-full h-12 rounded-xl border border-gray-200 px-4 text-sm outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+        className={`w-full h-12 rounded-xl border px-4 text-sm outline-none focus:ring-2 disabled:bg-gray-100 disabled:cursor-not-allowed ${
+          error
+            ? "border-red-500 focus:ring-red-500"
+            : "border-gray-200 focus:ring-blue-500"
+        }`}
       />
+       <FormError error={error} />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import FormError from "./FormError";
 type SelectFieldProps = {
   label: string;
   name?: string;
@@ -6,6 +7,7 @@ type SelectFieldProps = {
   onChange?: (value: string) => void;
   disabled?: boolean;
   required?: boolean;
+  error?: string;
 };
 
 export default function SelectField({
@@ -16,6 +18,7 @@ export default function SelectField({
   onChange,
   disabled = false,
   required = false,
+  error,
 }: SelectFieldProps) {
   return (
     <div>
@@ -29,7 +32,11 @@ export default function SelectField({
         disabled={disabled}
         required={required}
         onChange={(e) => onChange?.(e.target.value)}
-        className="w-full h-12 rounded-xl border border-gray-200 px-4 text-sm outline-none focus:ring-2 focus:ring-blue-500 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+        className={`w-full h-12 rounded-xl border px-4 text-sm outline-none focus:ring-2 bg-white disabled:bg-gray-100 disabled:cursor-not-allowed ${
+        error
+          ? "border-red-500 focus:ring-red-500"
+          : "border-gray-200 focus:ring-blue-500"
+        }`}
       >
         {options.map((option) => (
           <option key={option} value={option}>
@@ -37,6 +44,7 @@ export default function SelectField({
           </option>
         ))}
       </select>
+      <FormError error={error} />
     </div>
   );
 }

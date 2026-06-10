@@ -5,11 +5,12 @@ import { redirect } from "next/navigation";
 
 import { CategorySchema } from "@/schemas/category.schema";
 import { createCategory, updateCategory, deleteCategory } from "@/services/category.service";
-
+import type { ActionState } from "@/types/action-state";
 
 export async function createCategoryAction(
+  prevState: ActionState,
   formData: FormData
-) {
+): Promise<ActionState> {
   const rawData = {
     name: formData.get("name"),
     status: formData.get("status"),
@@ -25,12 +26,20 @@ export async function createCategoryAction(
         .filter(Boolean) ?? [],
   };
 
-  const validatedData =
-    CategorySchema.parse(rawData);
+  const validationResult = CategorySchema.safeParse(rawData);
+  if (!validationResult.success) {
+    return {
+      success: false,
+      errors:
+        validationResult.error.flatten()
+          .fieldErrors,
+    };
+  }
 
   await createCategory(
-    validatedData
+    validationResult.data
   );
+    
 
   revalidatePath(
     "/admin/categories"

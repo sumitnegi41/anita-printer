@@ -1,16 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useActionState } from "react";
 
 import { createCategoryAction, updateCategoryAction, } from "@/actions/category.actions";
 
 import type { Category } from "@/types/category";
+import type { ActionState } from "@/types/action-state";
 
 import FormSection from "@/components/forms/FormSection";
 import InputField from "@/components/forms/InputField";
 import SelectField from "@/components/forms/SelectField";
 import TextareaField from "@/components/forms/TextareaField";
 import FormSubmitButton from "@/components/forms/FormSubmitButton";
+import FormAlert from "@/components/forms/FormAlert";
 
 type CategoryFormProps = {
   mode: "create" | "edit";
@@ -71,8 +73,14 @@ export default function CategoryForm({
           category!.id
         );
 
+    const initialState: ActionState = { success: true, };
+    const [state, formAction] =
+    useActionState( action as any, initialState );
   return (
-    <form action={action}>
+    <form action={formAction}>
+     <FormAlert
+      show={Boolean(state.errors)}
+    />
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
@@ -109,6 +117,9 @@ export default function CategoryForm({
             name="name"
             value={name}
             onChange={setName}
+             error={
+                state.errors?.name?.[0]
+              }
             placeholder="Enter category name"
           />
 
@@ -135,6 +146,7 @@ export default function CategoryForm({
             name="description"
             value={description}
             onChange={setDescription}
+            error={state.errors?.description?.[0]}
             placeholder="Write category description..."
           />
         </FormSection>
@@ -145,6 +157,7 @@ export default function CategoryForm({
             name="seoTitle"
             value={seoTitle}
             onChange={setSeoTitle}
+            error={state.errors?.seoTitle?.[0]}
             placeholder="Enter SEO title"
           />
 
@@ -153,6 +166,7 @@ export default function CategoryForm({
             name="seoDescription"
             value={seoDescription}
             onChange={setSeoDescription}
+            error={state.errors?.seoDescription?.[0]}
             placeholder="Enter SEO description..."
           />
 
@@ -161,6 +175,7 @@ export default function CategoryForm({
             name="seoKeywords"
             value={seoKeywords}
             onChange={setSeoKeywords}
+            error={state.errors?.seoKeywords?.[0]}
             placeholder="Enter keywords separated by commas"
           />
         </FormSection>
