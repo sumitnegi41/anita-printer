@@ -52,8 +52,9 @@ export async function createCategoryAction(
 
 export async function updateCategoryAction(
   id: number,
+  prevState: ActionState,
   formData: FormData
-) {
+): Promise<ActionState> {
   const rawData = {
     name: formData.get("name"),
     status: formData.get("status"),
@@ -69,25 +70,21 @@ export async function updateCategoryAction(
         .filter(Boolean) ?? [],
   };
 
-  const validatedData =
-    CategorySchema.parse(rawData);
+  const validationResult = CategorySchema.safeParse(rawData);
 
-  await updateCategory(
-    id,
-    validatedData
-  );
+  if (!validationResult.success) {
+    return {
+      success: false,
+      errors: validationResult.error.flatten().fieldErrors,
+    };
+  }
 
-  revalidatePath(
-    "/admin/categories"
-  );
+  await updateCategory(id, validationResult.data);
 
-  revalidatePath(
-    `/admin/categories/${id}`
-  );
+  revalidatePath("/admin/categories");
+  revalidatePath(`/admin/categories/${id}`);
 
-  redirect(
-    `/admin/categories/${id}`
-  );
+  redirect(`/admin/categories/${id}`);
 }
 
 export async function deleteCategoryAction(

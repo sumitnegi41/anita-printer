@@ -41,7 +41,7 @@ export async function getCategories({
   status = "all",
   page = 1,
 }: CategoryFilters = {}) {
-  const ITEMS_PER_PAGE = 10;
+  const ITEMS_PER_PAGE = 2;
 
   const where = {
     ...(search && {

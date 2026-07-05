@@ -1,18 +1,35 @@
+"use client";
+
+import Link from "next/link";
+import {
+  usePathname,
+  useSearchParams,
+} from "next/navigation";
+
 type PaginationProps = {
   currentPage: number;
   totalPages: number;
-  onPageChange: (
-    page: number
-  ) => void;
 };
 
 export default function Pagination({
   currentPage,
   totalPages,
-  onPageChange,
 }: PaginationProps) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   if (totalPages <= 1) {
     return null;
+  }
+
+  function createPageUrl(page: number) {
+    const params = new URLSearchParams(
+      searchParams.toString()
+    );
+
+    params.set("page", String(page));
+
+    return `${pathname}?${params.toString()}`;
   }
 
   return (
@@ -21,21 +38,20 @@ export default function Pagination({
         { length: totalPages },
         (_, index) => {
           const page = index + 1;
+          const isActive = currentPage === page;
 
           return (
-            <button
+            <Link
               key={page}
-              onClick={() =>
-                onPageChange(page)
-              }
+              href={createPageUrl(page)}
               className={`rounded-md border px-3 py-2 text-sm transition ${
-                currentPage === page
+                isActive
                   ? "bg-gray-900 text-white"
                   : "bg-white text-gray-700 hover:bg-gray-100"
               }`}
             >
               {page}
-            </button>
+            </Link>
           );
         }
       )}

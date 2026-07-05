@@ -2,6 +2,7 @@ import CategoriesTable from "@/components/dashboard/categories/CategoriesTable";
 import PageHeader from "@/components/shared/PageHeader";
 import { getCategories } from "@/services/category.service";
 import CategoriesFilters from "@/components/dashboard/categories/CategoriesFilters";
+import Pagination from "@/components/shared/Pagination";
 
 type CategoriesPageProps = {
   searchParams: Promise<{
@@ -35,6 +36,10 @@ export default async function CategoriesPage({
 
       <CategoriesTable
         categories={result.categories}
+      />
+      <Pagination
+        currentPage={result.currentPage}
+        totalPages={result.totalPages}
       />
     </div>
   );
